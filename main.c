@@ -6,13 +6,13 @@ int main() {
     // Xサーバーに接続
     Display *display;
     if ((display = XOpenDisplay(NULL)) == NULL) {
-        fprintf(stderr, "Can't connect to X server !\n");
+        fprintf(stderr, "Can't connect to X server!\n");
         exit(EXIT_FAILURE);
     }
 
     // 単一スクリーンのみサポート
     if (ScreenCount(display) != 1) {
-        fprintf(stderr, "No support for multiple screens !\n");
+        fprintf(stderr, "No support for multiple screens!\n");
         exit(EXIT_FAILURE);
     }
 
