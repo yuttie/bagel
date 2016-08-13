@@ -35,14 +35,14 @@ int main() {
     }
 
     // Select events
-    Window rootWindow = DefaultRootWindow(display);
+    Window root_window = DefaultRootWindow(display);
     XIEventMask event_mask;
     unsigned char mask[1] = {0};
     event_mask.deviceid = XIAllDevices;
     event_mask.mask_len = sizeof(mask);
     event_mask.mask = mask;
     XISetMask(mask, XI_Motion);
-    XISelectEvents(display, rootWindow, &event_mask, 1);
+    XISelectEvents(display, root_window, &event_mask, 1);
 
     // イベントループ
     for (;;) {
@@ -79,7 +79,7 @@ int main() {
                     if (new_x != event->root_x || new_y != event->root_y) {
                         XIWarpPointer(display,
                                       event->deviceid,
-                                      None, rootWindow,
+                                      None, root_window,
                                       0, 0, (unsigned int)width, (unsigned int)height,
                                       new_x, new_y);
                     }
