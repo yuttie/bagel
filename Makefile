@@ -1,7 +1,7 @@
 ########################################
 ## Macro Definition
 ########################################
-DEBUG    = -O2#-g -pg
+DEBUG    = -O2
 CC       = gcc
 CFLAGS   = -Wall -std=c99 $(DEBUG)
 CXX      = g++
