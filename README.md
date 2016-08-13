@@ -21,3 +21,8 @@ $ make
 ~~~sh
 ./bagel
 ~~~
+
+
+## License
+
+MIT License
