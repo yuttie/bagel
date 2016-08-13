@@ -63,24 +63,25 @@ int main() {
                     const int screenNum = DefaultScreen(display);
                     const int width  = DisplayWidth(display, screenNum);
                     const int height = DisplayHeight(display, screenNum);
+                    const int min_x = 0;
+                    const int max_x = width - 1;
+                    const int min_y = 0;
+                    const int max_y = height - 1;
 
-                    const int x = event->root_x;
-                    const int y = event->root_y;
-                    int newX = x;
-                    int newY = y;
-
-                    if      (x <= 0)             { newX = width - 2; }
-                    else if (x >= (width - 1))   { newX = 1;         }
-
-                    if      (y <= 0)             { newY = height - 2; }
-                    else if (y >= (height - 1))  { newY = 1;          }
+                    const double new_x = event->root_x <= min_x ? max_x - 1
+                                       : event->root_x >= max_x ? min_x + 1
+                                       : event->root_x;
+                    const double new_y = event->root_y <= min_y ? max_y - 1
+                                       : event->root_y >= max_y ? min_y + 1
+                                       : event->root_y;
 
                     // ポインタを移動
-                    if (newX != x || newY != y) {
-                        XWarpPointer(display,
-                                     None, rootWindow,
-                                     0, 0, width, height,
-                                     newX, newY);
+                    if (new_x != event->root_x || new_y != event->root_y) {
+                        XIWarpPointer(display,
+                                      event->deviceid,
+                                      None, rootWindow,
+                                      0, 0, width, height,
+                                      new_x, new_y);
                     }
                 }
                 break;
