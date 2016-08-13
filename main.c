@@ -80,7 +80,7 @@ int main() {
                         XIWarpPointer(display,
                                       event->deviceid,
                                       None, rootWindow,
-                                      0, 0, width, height,
+                                      0, 0, (unsigned int)width, (unsigned int)height,
                                       new_x, new_y);
                     }
                 }
