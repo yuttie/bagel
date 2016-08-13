@@ -77,8 +77,21 @@ int main() {
 
                     // ポインタを移動
                     if (new_x != event->root_x || new_y != event->root_y) {
+                        // Get the device ID of the master pointer
+                        int num_devices;
+                        XIDeviceInfo* device = XIQueryDevice(display, event->deviceid, &num_devices);
+                        assert(num_devices == 1);
+                        int deviceid = event->deviceid;
+                        if (device->use == XIMasterPointer) {
+                            deviceid = device->deviceid;
+                        }
+                        else if (device->use == XISlavePointer) {
+                            deviceid = device->attachment;
+                        }
+                        XIFreeDeviceInfo(device);
+
                         XIWarpPointer(display,
-                                      event->deviceid,
+                                      deviceid,
                                       None, root_window,
                                       0, 0, (unsigned int)width, (unsigned int)height,
                                       new_x, new_y);
