@@ -7,7 +7,7 @@
 #include <X11/extensions/XInput2.h>
 
 int main() {
-    // Xサーバーに接続
+    // Connect to the X server
     Display *display;
     if ((display = XOpenDisplay(NULL)) == NULL) {
         fprintf(stderr, "Can't connect to X server!\n");
@@ -28,7 +28,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    // 単一スクリーンのみサポート
+    // Currently we support only single screen environments
     if (ScreenCount(display) != 1) {
         fprintf(stderr, "No support for multiple screens!\n");
         exit(EXIT_FAILURE);
@@ -44,7 +44,7 @@ int main() {
     XISetMask(mask, XI_Motion);
     XISelectEvents(display, root_window, &event_mask, 1);
 
-    // イベントループ
+    // Event loop
     for (;;) {
         XEvent event;
         XGenericEventCookie* cookie = &event.xcookie;
@@ -58,7 +58,7 @@ int main() {
 
             switch(cookie->evtype) {
             case XI_Motion: {
-                // モディファイアキーが押されていない時のみポインタを移動させる
+                // Let the pointer go beyond only when no modifier key is held down
                 if (event->mods.base == 0) {
                     const int screenNum = DefaultScreen(display);
                     const int width  = DisplayWidth(display, screenNum);
@@ -75,7 +75,7 @@ int main() {
                                        : event->root_y >= max_y ? min_y + 1
                                        : event->root_y;
 
-                    // ポインタを移動
+                    // Move the pointer if necessary
                     if (new_x != event->root_x || new_y != event->root_y) {
                         // Get the device ID of the master pointer
                         int num_devices;
@@ -90,6 +90,7 @@ int main() {
                         }
                         XIFreeDeviceInfo(device);
 
+                        // Move the master pointer
                         XIWarpPointer(display,
                                       deviceid,
                                       None, root_window,
@@ -106,7 +107,7 @@ int main() {
         XFreeEventData(display, cookie);
     }
 
-    // Xサーバーへの接続を閉じる
+    // Close the session
     XCloseDisplay(display);
 
     return 0;
